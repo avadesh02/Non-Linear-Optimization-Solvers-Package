@@ -18,7 +18,7 @@ gradproj = GradientProjection()
 x_opt, f_opt = gradproj.optimize(G, c, l, u, 10)
 print(x_opt.T)
 print("primal objective value : " + str(f_opt.numpy()))
-# gradproj.stats()
+gradproj.stats()
 
 ## setiing up problem in cvx to compare results
 def form_gh_constr(l, u):
