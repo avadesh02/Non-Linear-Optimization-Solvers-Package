@@ -159,15 +159,12 @@ class BoundConstrainedFormulation:
         aug_lag_k = lambda y : self.compute_aug_lagrangian(y, lambda_k, u_k, fun, bc_arr)
         for k in range(maxit):
             print("iter no. : " + str(k))
-            # x_k, kkt_violation = self.aug_gradproj.optimize(lag_k, aug_lag_k, bc_arr, l, u, \
-            #                                 n, ni, u_k, omega_k, self.maxit, x_k, use_sr1)
             x_k, kkt_violation = self.ngp.optimize(aug_lag_k, l, u, self.maxit, \
                                             omega_k, x0 = x_k, use_sr1=use_sr1)
-            # self.ngp.stats()
             self.ngp.f_all = []
             print("kkt violation : "  + str(kkt_violation) )
             violation_k = self.compute_constraint_violation(x_k, bc_arr)
-            # self.f_all.append(fun(x_k))
+            self.f_all.append(fun(x_k))
             self.const_violation.append(violation_k)
             print("constraint violation : " + str(self.const_violation[-1]))
             if violation_k < eta_k + self.tol:
