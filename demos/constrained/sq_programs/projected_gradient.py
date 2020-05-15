@@ -6,7 +6,7 @@ import torch
 from py_solvers.constrained.sq_programs.projected_gradient import NonLinearGradientProjection
 
 def f(x):
-    return x[0]*x[1]*x[2]
+    return x[0]*x[1]*x[2] + (x[0]*x[1] - 2)**2
 
 l = torch.tensor([[-2.0], [-1.0], [-1.0]], dtype = float)
 u = torch.tensor([[7.0], [5.0], [5.0]], dtype = float)
