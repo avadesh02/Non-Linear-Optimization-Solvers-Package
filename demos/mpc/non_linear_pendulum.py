@@ -81,15 +81,15 @@ def ci2(nx, nu, t):
     n_t = (nx + nu)*t
     return lambda x : x[n_t + nx]
 
-horizon = 0.2
+horizon = 0.4
 dt = 0.1
 nx = 6
 nu = 1
 n =  int(nx + (horizon/dt)*(nx) + (horizon/dt)*(nu))
 print(n)
 x0 = torch.tensor([[0], [0], [0.2], [1.0], [0], [0]], dtype=float)
-cop = torch.tensor([[-0.1], [0], [0]],  dtype=float)
-cop_next = torch.tensor([[0.1], [0], [-0.02]], dtype=float)
+cop = torch.tensor([[0.1], [0], [0]],  dtype=float)
+cop_next = torch.tensor([[0.2], [0], [0.1]], dtype=float)
 u_lim = 25.0 # max acceleration in the z direction
 h_nom = 0.2 # prefered height above the ground after each step
 
@@ -115,12 +115,12 @@ for i in range(int(horizon/dt)):
     # ci.append(ci3(nx, nu, i, cop, kin_lim))
 
 def f(x):
-    return torch.tensor([0], dtype=float)
-
+    return (x[-4] - cop_next[2] - 0.2)**2 
+    
 x0 = torch.zeros(n, 1, dtype = float)
 
 bcf = BoundConstrainedFormulation(maxit = 100)
-x_opt = bcf.optimize(f, ce, ci, n, 0.001, 0.001, 4, use_sr1 = False)
+x_opt = bcf.optimize(f, ce, ci, n, 0.001, 0.001, 20, use_sr1 = False)
 
 fig, axs = plt.subplots(3,1)
 axs[0].plot(x_opt[0::7], label = "x")
